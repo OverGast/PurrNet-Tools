@@ -15,7 +15,7 @@ public class FrustumVisibilitySync : NetworkBehaviour
     [Header("Update")]
     [Min(0.02f)]
     [SerializeField] private float checkInterval = 0.10f;
-    [SerializeField] private bool allowUpdate = true;
+    public bool allowUpdate = true;
 
     // Server-side events (invoked only when aggregate state transitions happen)
     /// <summary>
@@ -64,15 +64,10 @@ public class FrustumVisibilitySync : NetworkBehaviour
     protected override void OnSpawned()
     {
         if (isClient) EnsureRendererAndCamera();
+
+        _nextCheckTime = Time.time + UnityEngine.Random.Range(0f, checkInterval);
         // If you ever need an initial aggregate recompute on server spawn, uncomment:
         // if (isServer) RecomputeAggregatesAndEmitIfChanged();
-    }
-
-    private void OnEnable()
-    {
-        // Stagger client checks so many objects don't evaluate on the same frame.
-        // This reduces spikes when many instances are enabled.
-        _nextCheckTime = Time.time + UnityEngine.Random.Range(0f, checkInterval);
     }
 
     private void OnDisable()
