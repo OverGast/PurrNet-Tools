@@ -29,7 +29,7 @@ public class NetworkClock : NetworkBehaviour
     /// <summary>
     /// Registers this instance so static accessors can resolve the active NetworkClock.
     /// </summary>
-    private void Awake()
+    protected override void OnSpawned()
     {
         InstanceHandler.RegisterInstance(this);
     }
